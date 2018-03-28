@@ -45,16 +45,48 @@ if (env.stringified['process.env'].NODE_ENV !== '"production"') {
 }
 
 // Note: defined here because it will be used more than once.
-const cssFilename = 'static/css/[name].[contenthash:8].css';
+const cssWithLessFilename = 'static/css/[name].[contenthash:8].css';
+const sassFilename = 'static/css/[name]-sass.[contenthash:8].css';
 
 // ExtractTextPlugin expects the build output to be flat.
 // (See https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/27)
 // However, our output is structured with css, js and media folders.
 // To have this structure working with relative paths, we have to use custom options.
-const extractTextPluginOptions = shouldUseRelativeAssetPaths
-  ? // Making sure that the publicPath goes back to to build folder.
-    { publicPath: Array(cssFilename.split('/').length).join('../') }
-  : {};
+const extractTextPluginOptions = fileName =>
+  shouldUseRelativeAssetPaths
+    ? // Making sure that the publicPath goes back to to build folder.
+      { publicPath: Array(fileName.split('/').length).join('../') }
+    : {};
+
+const cssLoader = {
+  loader: require.resolve('css-loader'),
+  options: {
+    importLoaders: 1,
+    minimize: true,
+    sourceMap: shouldUseSourceMap,
+  },
+};
+
+const postCssLoader = {
+  loader: require.resolve('postcss-loader'),
+  options: {
+    // Necessary for external CSS imports to work
+    // https://github.com/facebookincubator/create-react-app/issues/2677
+    ident: 'postcss',
+    plugins: () => [
+      require('postcss-flexbugs-fixes'),
+      autoprefixer({
+        browsers: [
+          '>1%',
+          'last 4 versions',
+          'Firefox ESR',
+          'not ie < 9', // React doesn't support IE8 anyway
+        ],
+        flexbox: 'no-2009',
+      }),
+    ],
+  },
+};
 
 // This is the production configuration.
 // It compiles slowly and is focused on producing a fast and minimal bundle.
@@ -200,7 +232,7 @@ module.exports = {
           // use the "style" loader inside the async code so CSS from them won't be
           // in the main CSS file.
           {
-            test: /\.css$/,
+            test: /(\.css|.less)$/,
             loader: ExtractTextPlugin.extract(
               Object.assign(
                 {
@@ -211,37 +243,34 @@ module.exports = {
                     },
                   },
                   use: [
-                    {
-                      loader: require.resolve('css-loader'),
-                      options: {
-                        importLoaders: 1,
-                        minimize: true,
-                        sourceMap: shouldUseSourceMap,
-                      },
-                    },
-                    {
-                      loader: require.resolve('postcss-loader'),
-                      options: {
-                        // Necessary for external CSS imports to work
-                        // https://github.com/facebookincubator/create-react-app/issues/2677
-                        ident: 'postcss',
-                        plugins: () => [
-                          require('postcss-flexbugs-fixes'),
-                          autoprefixer({
-                            browsers: [
-                              '>1%',
-                              'last 4 versions',
-                              'Firefox ESR',
-                              'not ie < 9', // React doesn't support IE8 anyway
-                            ],
-                            flexbox: 'no-2009',
-                          }),
-                        ],
-                      },
-                    },
+                    cssLoader,
+                    postCssLoader,
+                    require.resolve('less-loader'),
                   ],
                 },
-                extractTextPluginOptions
+                extractTextPluginOptions(cssWithLessFilename)
+              )
+            ),
+            // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
+          },
+          {
+            test: /(\.sass|.scss)$/,
+            loader: ExtractTextPlugin.extract(
+              Object.assign(
+                {
+                  fallback: {
+                    loader: require.resolve('style-loader'),
+                    options: {
+                      hmr: false,
+                    },
+                  },
+                  use: [
+                    cssLoader,
+                    postCssLoader,
+                    require.resolve('sass-loader'),
+                  ],
+                },
+                extractTextPluginOptions(sassFilename)
               )
             ),
             // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
@@ -323,9 +352,8 @@ module.exports = {
       sourceMap: shouldUseSourceMap,
     }),
     // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
-    new ExtractTextPlugin({
-      filename: cssFilename,
-    }),
+    new ExtractTextPlugin({ filename: cssWithLessFilename }),
+    new ExtractTextPlugin({ filename: sassFilename }),
     // Generate a manifest file which contains a mapping of all asset filenames
     // to their corresponding output file so that tools can pick it up without
     // having to parse `index.html`.
