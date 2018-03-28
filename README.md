@@ -13,11 +13,11 @@ _Do you know react and want to try out typescript? Or do you know typescript and
 ```sh
 npm install -g create-react-app
 
-create-react-app my-app --scripts-version=@Dean177/react-scripts-ts
+create-react-app my-app --scripts-version=@dean177/react-scripts-ts
 cd my-app/
 npm start
 ```
-## Differences from `react-scripts-ts
+## Differences from `react-scripts-ts`
 
 - [Less](http://lesscss.org/) and [Sass](https://sass-lang.com/) are included by default, no more [watcher workarounds](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#adding-a-css-preprocessor-sass-less-etc)
 
@@ -25,7 +25,7 @@ npm start
 
 ```bash
 yarn remove react-scripts-ts
-yarn add @Dean177/react-scripts-ts
+yarn add @dean177/react-scripts-ts
 ```
 
 ## Migration
