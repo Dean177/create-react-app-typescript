@@ -1,9 +1,10 @@
-# `react-scripts-ts` [![npm version](https://badge.fury.io/js/react-scripts-ts.svg)](https://badge.fury.io/js/react-scripts-ts) [![Build Status](https://travis-ci.org/wmonk/create-react-app-typescript.svg?branch=master)](https://travis-ci.org/wmonk/create-react-app-typescript)
+# `@Dean177/react-scripts-ts` [![npm version](https://badge.fury.io/js/react-scripts-ts.svg)](https://badge.fury.io/js/react-scripts-ts) [![Build Status](https://travis-ci.org/Dean177/create-react-app-typescript.svg?branch=master)](https://travis-ci.org/Dean177/create-react-app-typescript)
 
 Create React apps (with Typescript) with no build configuration.
 
  * [Getting Started](#tldr) – How to create a new app.
- * [User Guide](https://github.com/wmonk/create-react-app-typescript/blob/master/packages/react-scripts/template/README.md) – How to develop apps bootstrapped with react scripts ts.
+ * [Differences from `react-scripts-ts`](#Differences from `react-scripts-ts`) – How to create a new app.
+ * [User Guide](https://github.com/Dean177/create-react-app-typescript/blob/master/packages/react-scripts/template/README.md) – How to develop apps bootstrapped with react scripts ts.
 
 _Do you know react and want to try out typescript? Or do you know typescript and want to try out react?_ Get all the benefits from `create-react-app` but you use typescript! 🚀
 
@@ -12,9 +13,19 @@ _Do you know react and want to try out typescript? Or do you know typescript and
 ```sh
 npm install -g create-react-app
 
-create-react-app my-app --scripts-version=react-scripts-ts
+create-react-app my-app --scripts-version=@Dean177/react-scripts-ts
 cd my-app/
 npm start
+```
+## Differences from `react-scripts-ts
+
+- [Less](http://lesscss.org/) and [Sass](https://sass-lang.com/) are included by default, no more [watcher workarounds](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#adding-a-css-preprocessor-sass-less-etc)
+
+## Migration from `react-scripts-ts`
+
+```bash
+yarn remove react-scripts-ts
+yarn add @Dean177/react-scripts-ts
 ```
 
 ## Migration
@@ -49,7 +60,7 @@ Test suite failed to run
 }
 ```
 
-To fix this, create a new file *in the root of the project* called `tsconfig.test.json`, and paste [the content of this file into it](https://raw.githubusercontent.com/wmonk/create-react-app-typescript/master/packages/react-scripts/template/tsconfig.test.json). Everything should work now. For more info, please see [this issue](https://github.com/wmonk/create-react-app-typescript/issues/141).
+To fix this, create a new file *in the root of the project* called `tsconfig.test.json`, and paste [the content of this file into it](https://raw.githubusercontent.com/Dean177/create-react-app-typescript/master/packages/react-scripts/template/tsconfig.test.json). Everything should work now. For more info, please see [this issue](https://github.com/wmonk/create-react-app-typescript/issues/141).
 
 ## Changelog
 
