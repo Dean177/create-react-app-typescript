@@ -19,7 +19,7 @@ npm start
 ```
 ## Differences from `react-scripts-ts`
 
-- [Less](http://lesscss.org/) and [Sass](https://sass-lang.com/) are included by default, no more [watcher workarounds](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#adding-a-css-preprocessor-sass-less-etc)
+- [Sass](https://sass-lang.com/) is included by default, no more [watcher workarounds](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#adding-a-css-preprocessor-sass-less-etc)
 
 ## Migration from `react-scripts-ts`
 
