@@ -14,8 +14,8 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
-const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
+const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
@@ -24,10 +24,12 @@ const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
 const publicPath = '/';
+
 // `publicUrl` is just like `publicPath`, but we will provide it to our app
 // as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript.
 // Omit trailing slash as %PUBLIC_PATH%/xyz looks better than %PUBLIC_PATH%xyz.
 const publicUrl = '';
+
 // Get environment variables to inject into our app.
 const env = getClientEnvironment(publicUrl);
 
@@ -59,13 +61,34 @@ const postCssLoader = {
   },
 };
 
+const threadLoader = {
+  loader: require.resolve('thread-loader'),
+  options: {
+    // there should be 1 cpu for the fork-ts-checker-webpack-plugin
+    workers: require('os').cpus().length - 1,
+  },
+};
+
+const babelLoader = {
+  loader: require.resolve('babel-loader'),
+  options: {
+    // @remove-on-eject-begin
+    babelrc: true,
+    // @remove-on-eject-end
+    cacheDirectory: true,
+    compact: true,
+  },
+};
+
 // This is the development configuration.
 // It is focused on developer experience and fast rebuilds.
 // The production configuration is different and lives in a separate file.
 module.exports = {
-  // You may want 'eval' instead if you prefer to see the compiled output in DevTools.
-  // See the discussion in https://github.com/facebookincubator/create-react-app/issues/343.
-  devtool: 'cheap-module-source-map',
+  // This makes the bundle appear split into separate modules in the devtools.
+  // We don't use source maps here because they can be confusing:
+  // https://github.com/facebookincubator/create-react-app/issues/343#issuecomment-237241875
+  // You may want 'cheap-module-source-map' instead if you prefer source maps.
+  devtool: 'eval',
   // These are the "entry points" to our application.
   // This means they will be the "root" imports that are included in JS bundle.
   // The first two entry points enable "hot" CSS and auto-refreshes for JS.
@@ -161,13 +184,6 @@ module.exports = {
       // TODO: Disable require.ensure as it's not a standard language feature.
       // We are waiting for https://github.com/facebookincubator/create-react-app/issues/2176.
       // { parser: { requireEnsure: false } },
-
-      {
-        test: /\.(js|jsx|mjs)$/,
-        loader: require.resolve('source-map-loader'),
-        enforce: 'pre',
-        include: paths.appSrc,
-      },
       {
         // "oneOf" will traverse all following loaders until one will
         // match the requirements. When no loader matches it will fall
@@ -184,32 +200,11 @@ module.exports = {
               name: 'static/media/[name].[hash:8].[ext]',
             },
           },
+          // Process Typescript with Babel
           {
-            test: /\.(js|jsx|mjs)$/,
-            include: paths.appSrc,
-            loader: require.resolve('babel-loader'),
-            options: {
-              // @remove-on-eject-begin
-              babelrc: false,
-              presets: [require.resolve('babel-preset-react-app')],
-              // @remove-on-eject-end
-              compact: true,
-            },
-          },
-
-          // Compile .tsx?
-          {
-            test: /\.(ts|tsx)$/,
-            include: paths.appSrc,
-            use: [
-              {
-                loader: require.resolve('ts-loader'),
-                options: {
-                  // disable type checker - we will use it in fork plugin
-                  transpileOnly: true,
-                },
-              },
-            ],
+            test: /\.(js|jsx|mjs|ts|tsx)$/,
+            exclude: /node_modules/,
+            use: [require.resolve('cache-loader'), threadLoader, babelLoader],
           },
           // "postcss" loader applies autoprefixer to our CSS.
           // "css" loader resolves paths in CSS and adds assets as dependencies.

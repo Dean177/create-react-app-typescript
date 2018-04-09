@@ -88,6 +88,21 @@ const postCssLoader = {
   },
 };
 
+const threadLoader = {
+  loader: 'thread-loader',
+  options: {
+    // there should be 1 cpu for the fork-ts-checker-webpack-plugin
+    workers: require('os').cpus().length - 1,
+  },
+};
+
+const babelLoader = {
+  loader: 'babel-loader',
+  options: {
+    cacheDirectory: true,
+  },
+};
+
 // This is the production configuration.
 // It compiles slowly and is focused on producing a fast and minimal bundle.
 // The development configuration is different and lives in a separate file.
@@ -205,19 +220,11 @@ module.exports = {
               compact: true,
             },
           },
-          // Compile .tsx?
+          // Process Typescript files with Babel.
           {
-            test: /\.(ts|tsx)$/,
-            include: paths.appSrc,
-            use: [
-              {
-                loader: require.resolve('ts-loader'),
-                options: {
-                  // disable type checker - we will use it in fork plugin
-                  transpileOnly: true,
-                },
-              },
-            ],
+            test: /\.ts(x?)$/,
+            exclude: /node_modules/,
+            use: [require.resolve('cache-loader'), threadLoader, babelLoader],
           },
           // The notation here is somewhat confusing.
           // "postcss" loader applies autoprefixer to our CSS.
