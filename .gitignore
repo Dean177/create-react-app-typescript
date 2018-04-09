@@ -1,3 +1,4 @@
+.cache-loader/
 .idea/
 .vscode/
 node_modules/
