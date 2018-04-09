@@ -45,8 +45,7 @@ if (env.stringified['process.env'].NODE_ENV !== '"production"') {
 }
 
 // Note: defined here because it will be used more than once.
-const cssWithLessFilename = 'static/css/[name].[contenthash:8].css';
-const sassFilename = 'static/css/[name]-sass.[contenthash:8].css';
+const cssFilename = 'static/css/[name].[contenthash:8].css';
 
 // ExtractTextPlugin expects the build output to be flat.
 // (See https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/27)
@@ -96,7 +95,7 @@ const threadLoader = {
   },
 };
 
-const babelLoader = {
+const tsBabelLoader = {
   loader: 'babel-loader',
   options: {
     cacheDirectory: true,
@@ -220,11 +219,11 @@ module.exports = {
               compact: true,
             },
           },
-          // Process Typescript files with Babel.
+          // Process Typescript files with Babel. TODO ensure this is the same (and correct) as the dev config
           {
             test: /\.ts(x?)$/,
             exclude: /node_modules/,
-            use: [require.resolve('cache-loader'), threadLoader, babelLoader],
+            use: [require.resolve('cache-loader'), threadLoader, tsBabelLoader],
           },
           // The notation here is somewhat confusing.
           // "postcss" loader applies autoprefixer to our CSS.
@@ -239,29 +238,7 @@ module.exports = {
           // use the "style" loader inside the async code so CSS from them won't be
           // in the main CSS file.
           {
-            test: /(\.css|.less)$/,
-            loader: ExtractTextPlugin.extract(
-              Object.assign(
-                {
-                  fallback: {
-                    loader: require.resolve('style-loader'),
-                    options: {
-                      hmr: false,
-                    },
-                  },
-                  use: [
-                    cssLoader,
-                    postCssLoader,
-                    require.resolve('less-loader'),
-                  ],
-                },
-                extractTextPluginOptions(cssWithLessFilename)
-              )
-            ),
-            // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
-          },
-          {
-            test: /(\.sass|.scss)$/,
+            test: /\.(css|sass|scss)$/,
             loader: ExtractTextPlugin.extract(
               Object.assign(
                 {
@@ -277,7 +254,7 @@ module.exports = {
                     require.resolve('sass-loader'),
                   ],
                 },
-                extractTextPluginOptions(sassFilename)
+                extractTextPluginOptions(cssFilename)
               )
             ),
             // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
@@ -370,8 +347,7 @@ module.exports = {
       sourceMap: shouldUseSourceMap,
     }),
     // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
-    new ExtractTextPlugin({ filename: cssWithLessFilename }),
-    new ExtractTextPlugin({ filename: sassFilename }),
+    new ExtractTextPlugin({ filename: cssFilename }),
     // Generate a manifest file which contains a mapping of all asset filenames
     // to their corresponding output file so that tools can pick it up without
     // having to parse `index.html`.
