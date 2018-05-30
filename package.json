@@ -6,11 +6,13 @@
     "create-react-app": "tasks/cra.sh",
     "e2e": "tasks/e2e-simple.sh",
     "e2e:docker": "tasks/local-test.sh",
-    "postinstall": "node bootstrap.js && cd packages/react-error-overlay/ && npm run build:prod",
+    "//postinstall": "node bootstrap.js && cd packages/react-error-overlay/ && npm run build:prod",
     "publish": "tasks/release.sh",
     "start": "node packages/react-scripts/scripts/start.js",
     "test": "node packages/react-scripts/scripts/test.js --env=jsdom",
-    "format": "prettier --trailing-comma es5 --single-quote --write \"packages/*/*.js\" \"packages/*/!(node_modules)/**/*.js\"",
+    "format": "npm run format:js",
+    "format:js": "prettier --write \"packages/*/*.js\" \"packages/*/!(node_modules)/**/*.js\"",
+    "format:ts": "prettier --parser=typescript --write \"packages/*/*.ts\" \"packages/*/!(node_modules)/**/*\"",
     "precommit": "lint-staged"
   },
   "devDependencies": {
@@ -18,20 +20,31 @@
     "@types/node": "^7.0.21",
     "@types/react": "^15.6.1",
     "@types/react-dom": "^15.5.0",
-    "eslint": "^4.4.1",
-    "husky": "^0.13.2",
-    "lerna": "^2.0.0",
-    "lerna-changelog": "^0.6.0",
-    "lint-staged": "^3.3.1",
-    "prettier": "^1.5.2"
+    "eslint": "4.4.1",
+    "husky": "0.13.2",
+    "lerna": "2.6.0",
+    "lerna-changelog": "0.6.0",
+    "lint-staged": "3.3.1",
+    "prettier": "1.13.3"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "es5"
   },
   "lint-staged": {
     "*.js": [
-      "prettier --trailing-comma es5 --single-quote --write",
+      "prettier --write",
+      "git add"
+    ],
+    "*.ts": [
+      "prettier --write",
       "git add"
     ],
     "yarn.lock": [
       "git rm --cached"
     ]
-  }
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }

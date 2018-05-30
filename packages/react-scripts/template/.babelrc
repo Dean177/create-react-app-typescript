@@ -1,32 +1,4 @@
 {
-  "presets": [
-    [
-      "@babel/env",
-      {
-        "modules": false,
-        "debug": true
-      }
-    ],
-    "@babel/stage-3",
-    "@babel/react",
-    "@babel/typescript"
-  ],
-  "plugins": [
-    [
-      "module-resolver",
-      {
-        "extensions": [
-          ".js",
-          ".jsx",
-          ".ts",
-          ".tsx"
-        ],
-        "root": [
-          "./src"
-        ]
-      }
-    ]
-  ],
   "env": {
     "test": {
       "presets": [
@@ -47,5 +19,33 @@
         "transform-es2015-modules-commonjs"
       ]
     }
-  }
+  },
+  "plugins": [
+    [
+      "module-resolver",
+      {
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".ts",
+          ".tsx"
+        ],
+        "root": [
+          "./src"
+        ]
+      }
+    ]
+  ],
+  "presets": [
+    [
+      "@babel/env",
+      {
+        "modules": false,
+        "debug": true
+      }
+    ],
+    "@babel/stage-3",
+    "@babel/react",
+    "@babel/typescript"
+  ]
 }

@@ -251,7 +251,13 @@ module.exports = {
                   use: [
                     cssLoader,
                     postCssLoader,
-                    require.resolve('sass-loader'),
+                    {
+                      loader: require.resolve('sass-loader'),
+                      // See https://github.com/webpack-contrib/sass-loader/issues/556
+                      options: {
+                        includePaths: ['node_modules'],
+                      },
+                    },
                   ],
                 },
                 extractTextPluginOptions(cssFilename)

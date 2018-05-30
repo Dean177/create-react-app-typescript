@@ -21,14 +21,14 @@
     "react-scripts-ts": "./bin/react-scripts-ts.js"
   },
   "dependencies": {
-    "@babel/cli": "^7.0.0-beta.42",
-    "@babel/core": "^7.0.0-beta.42",
-    "@babel/node": "^7.0.0-beta.42",
-    "@babel/preset-env": "^7.0.0-beta.42",
-    "@babel/preset-react": "^7.0.0-beta.42",
-    "@babel/preset-stage-3": "^7.0.0-beta.42",
-    "@babel/preset-typescript": "^7.0.0-beta.42",
-    "@babel/register": "^7.0.0-beta.42",
+    "@babel/cli": "^7.0.0-beta.46",
+    "@babel/core": "^7.0.0-beta.46",
+    "@babel/node": "^7.0.0-beta.46",
+    "@babel/preset-env": "^7.0.0-beta.46",
+    "@babel/preset-react": "^7.0.0-beta.46",
+    "@babel/preset-stage-3": "^7.0.0-beta.46",
+    "@babel/preset-typescript": "^7.0.0-beta.46",
+    "@babel/register": "^7.0.0-beta.46",
     "autoprefixer": "7.1.6",
     "babel-jest": "^22.4.3",
     "babel-loader": "8.0.0-beta.2",
@@ -75,7 +75,9 @@
     "whatwg-fetch": "2.0.3"
   },
   "devDependencies": {
+    "@types/react-hot-loader": "3.0.6",
     "react": "^16.2.0",
+    "react-hot-loader": "4.0.1",
     "react-dom": "^16.2.0",
     "typescript": "^2.8.1"
   },

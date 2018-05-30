@@ -1,6 +1,7 @@
 import React from 'react';
+import { hot } from 'react-hot-loader';
 import './App.css';
-import './AppLess.less';
+import './AppScss.scss';
 import './AppSass.sass';
 
 import logo from './logo.svg';
@@ -12,9 +13,10 @@ const App = () => (
       <h1 className="App-title">Welcome to React</h1>
     </header>
     <p className="App-intro">
-      To get started, edit <code className="App-name">src/App.tsx</code> and save to reload.
+      To get started, edit <code className="App-name">src/App.tsx</code> and
+      save to reload.
     </p>
   </div>
 );
 
-export default App;
+export default hot(App);
