@@ -2,6 +2,7 @@
   "compilerOptions": {
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
     "forceConsistentCasingInFileNames": true,
     "jsx": "react",
     "lib": ["es6", "dom"],

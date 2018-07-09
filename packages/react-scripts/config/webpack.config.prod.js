@@ -45,8 +45,7 @@ if (env.stringified['process.env'].NODE_ENV !== '"production"') {
 }
 
 // Note: defined here because it will be used more than once.
-const cssWithLessFilename = 'static/css/[name].[contenthash:8].css';
-const sassFilename = 'static/css/[name]-sass.[contenthash:8].css';
+const cssFilename = 'static/css/[name].[contenthash:8].css';
 
 // ExtractTextPlugin expects the build output to be flat.
 // (See https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/27)
@@ -163,7 +162,7 @@ module.exports = {
       // please link the files into your node_modules/ and let module-resolution kick in.
       // Make sure your source files are compiled, as they will not be processed in any way.
       new ModuleScopePlugin(paths.appSrc, [paths.appPackageJson]),
-      new TsconfigPathsPlugin({ configFile: paths.appTsConfig }),
+      new TsconfigPathsPlugin({ configFile: paths.appTsProdConfig }),
     ],
   },
   module: {
@@ -215,6 +214,7 @@ module.exports = {
                 options: {
                   // disable type checker - we will use it in fork plugin
                   transpileOnly: true,
+                  configFile: paths.appTsProdConfig,
                 },
               },
             ],
@@ -232,29 +232,7 @@ module.exports = {
           // use the "style" loader inside the async code so CSS from them won't be
           // in the main CSS file.
           {
-            test: /(\.css|.less)$/,
-            loader: ExtractTextPlugin.extract(
-              Object.assign(
-                {
-                  fallback: {
-                    loader: require.resolve('style-loader'),
-                    options: {
-                      hmr: false,
-                    },
-                  },
-                  use: [
-                    cssLoader,
-                    postCssLoader,
-                    require.resolve('less-loader'),
-                  ],
-                },
-                extractTextPluginOptions(cssWithLessFilename)
-              )
-            ),
-            // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
-          },
-          {
-            test: /(\.sass|.scss)$/,
+            test: /(\.css|.sass|.scss)$/,
             loader: ExtractTextPlugin.extract(
               Object.assign(
                 {
@@ -270,7 +248,7 @@ module.exports = {
                     require.resolve('sass-loader'),
                   ],
                 },
-                extractTextPluginOptions(sassFilename)
+                extractTextPluginOptions(cssFilename)
               )
             ),
             // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
@@ -361,10 +339,10 @@ module.exports = {
       // Enable file caching
       cache: true,
       sourceMap: shouldUseSourceMap,
+    }), // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
+    new ExtractTextPlugin({
+      filename: cssFilename,
     }),
-    // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
-    new ExtractTextPlugin({ filename: cssWithLessFilename }),
-    new ExtractTextPlugin({ filename: sassFilename }),
     // Generate a manifest file which contains a mapping of all asset filenames
     // to their corresponding output file so that tools can pick it up without
     // having to parse `index.html`.
@@ -410,7 +388,7 @@ module.exports = {
     // Perform type checking and linting in a separate process to speed up compilation
     new ForkTsCheckerWebpackPlugin({
       async: false,
-      tsconfig: paths.appTsConfig,
+      tsconfig: paths.appTsProdConfig,
       tslint: paths.appTsLint,
     }),
   ],
