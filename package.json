@@ -1,17 +1,20 @@
 {
   "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "build": "node packages/react-scripts/scripts/build.js",
+    "build": "cd packages/react-scripts && node scripts/build.js",
     "changelog": "lerna-changelog",
-    "create-react-app": "tasks/cra.sh",
+    "create-react-app": "node tasks/cra.js",
     "e2e": "tasks/e2e-simple.sh",
     "e2e:docker": "tasks/local-test.sh",
-    "//postinstall": "node bootstrap.js && cd packages/react-error-overlay/ && npm run build:prod",
+    "postinstall": "cd packages/react-error-overlay/ && yarn build:prod",
     "publish": "tasks/publish.sh",
-    "start": "node packages/react-scripts/scripts/start.js",
-    "test": "node packages/react-scripts/scripts/test.js --env=jsdom",
-    "format": "npm run format:js",
-    "format:js": "prettier --write \"packages/*/*.js\" \"packages/*/!(node_modules)/**/*.js\"",
+    "start": "cd packages/react-scripts && node scripts/start.js",
+    "test": "cd packages/react-scripts && node scripts/test.js --env=jsdom",
+    "format": "yarn format:js",
+    "format:js": "prettier --write 'packages/*/*.js' 'packages/*/!(node_modules)/**/*.js'",
     "format:ts": "prettier --parser=typescript --write \"packages/*/*.ts\" \"packages/*/!(node_modules)/**/*\"",
     "precommit": "lint-staged"
   },
@@ -20,12 +23,12 @@
     "@types/node": "^7.0.21",
     "@types/react": "^15.6.1",
     "@types/react-dom": "^15.5.0",
-    "eslint": "4.4.1",
-    "husky": "0.13.2",
+    "eslint": "^4.4.1",
+    "husky": "^0.13.2",
     "lerna": "2.6.0",
-    "lerna-changelog": "0.6.0",
-    "lint-staged": "3.3.1",
-    "prettier": "1.13.3"
+    "lerna-changelog": "^0.6.0",
+    "lint-staged": "^3.3.1",
+    "prettier": "1.6.1"
   },
   "prettier": {
     "singleQuote": true,
@@ -37,14 +40,11 @@
       "git add"
     ],
     "*.ts": [
-      "prettier --write",
+      "prettier --parser typescript--write",
       "git add"
     ],
     "yarn.lock": [
       "git rm --cached"
     ]
-  },
-  "workspaces": [
-    "packages/*"
-  ]
+  }
 }

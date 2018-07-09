@@ -47,7 +47,6 @@ module.exports = (resolve, rootDir, isEjecting) => {
       '^react-native$': 'react-native-web',
     },
     moduleFileExtensions: [
-      'mjs',
       'web.ts',
       'ts',
       'web.tsx',
@@ -75,6 +74,7 @@ module.exports = (resolve, rootDir, isEjecting) => {
     'coverageReporters',
     'coverageThreshold',
     'snapshotSerializers',
+    'moduleNameMapper',
   ];
   if (overrides) {
     supportedKeys.forEach(key => {
