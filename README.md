@@ -3,7 +3,7 @@
 Create React apps (with Typescript) with no build configuration.
 
  * [Getting Started](#tldr) – How to create a new app.
- * [Differences from `react-scripts-ts`](#Differences from `react-scripts-ts`) – How to create a new app.
+ * [Differences from `react-scripts-ts`](#Differences from react-scripts-ts)
  * [User Guide](https://github.com/Dean177/create-react-app-typescript/blob/master/packages/react-scripts/template/README.md) – How to develop apps bootstrapped with react scripts ts.
 
 _Do you know react and want to try out typescript? Or do you know typescript and want to try out react?_ Get all the benefits from `create-react-app` but you use typescript! 🚀
@@ -17,8 +17,9 @@ create-react-app my-app --scripts-version=@dean177/react-scripts-ts
 cd my-app/
 npm start
 ```
-## Differences from `react-scripts-ts`
+## Differences from react-scripts-ts
 
+- Babel 7 with Typescript support is used rather than `ts-loader`.
 - [Sass](https://sass-lang.com/) is included by default, no more [watcher workarounds](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#adding-a-css-preprocessor-sass-less-etc)
 
 ## Migration from `react-scripts-ts`
